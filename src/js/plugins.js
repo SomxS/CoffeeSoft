@@ -1853,10 +1853,6 @@ function fn_ajax(datos, url, div = '') {
 }
 
 function formatPrice(amount, locale = 'es-MX', currency = 'MXN') {
-<<<<<<< HEAD
-
-=======
->>>>>>> 7ba913db8575743191304a29637ce7c9d0e2056a
   // Verificar si el monto es null, undefined o 0
   if (!amount) {
     return '-';
@@ -1865,9 +1861,5 @@ function formatPrice(amount, locale = 'es-MX', currency = 'MXN') {
     style: 'currency',
     currency: currency
   }).format(amount);
-<<<<<<< HEAD
 }
 
-=======
-}
->>>>>>> 7ba913db8575743191304a29637ce7c9d0e2056a
