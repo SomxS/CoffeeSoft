@@ -366,6 +366,31 @@ class Components extends Complements {
 
         $('#' + opts.parent)[opts.plugin]({ data: jsonForm, class: opts.class, type: 'default', id: opts.id, Element: opts.type });
 
+        /* propiedades de autofill*/
+
+        if (opts.autofill) {
+            // Init process auto inputs
+            for (const frm in opts.autofill) {
+                // Buscar elementos en el DOM cuyo atributo name coincida con la clave
+                const $element = $('#' + opts.parent).find(`[name="${frm}"]`);
+
+                if ($element.length > 0) {
+                    // Establecer valor dependiendo del tipo de elemento
+                    if ($element.is('select')) {
+                        // Seleccionar la opción correcta en el select
+                        $element.val(opts.autofill[frm]).trigger('change');
+                    } else {
+                        // Para otros elementos como input o textarea
+                        $element.val(opts.autofill[frm]);
+                    }
+
+
+                } else {
+
+                }
+            }
+        }
+
         let dataForm = {
             tipo: 'text',
             opc: 'set',
@@ -431,7 +456,7 @@ class Components extends Complements {
             required: true,
         };
 
-        let opts = Object.assign(defaults, options);
+        let opts = Object.assign(defaults, options); // Union de 
 
         // Creamos el contenedor
         var div = $("<div>", { class: opts.class, id: opts.id });
@@ -576,7 +601,7 @@ class Components extends Complements {
     }
 
 
-    ModalForm(options){
+    ModalForm(options) {
 
         // Configuración para formularios.
         const idFormulario = options.id ? options.id : 'modalForm';
@@ -589,10 +614,10 @@ class Components extends Complements {
             id: idFormulario,
             autofill: false,
             bootbox: {
-                title      : 'Modal example',
+                title: 'Modal example',
                 closeButton: true,
-                message    : components,
-                id         : 'modal'
+                message: components,
+                id: 'modal'
             },
             json: [
                 {
@@ -624,7 +649,7 @@ class Components extends Complements {
 
         // Proceso de autovalidacion
         if (opts.autovalidation) {
-           
+
 
             let options_validation = {
                 tipo: "text",
@@ -650,10 +675,10 @@ class Components extends Complements {
 
 
 
-        } 
+        }
 
 
-        
+
 
 
 
@@ -663,9 +688,8 @@ class Components extends Complements {
 
     }
 
-
     createModalForm(options) {
-
+        // id 
         const idFormulario = options.id ? options.id : 'frmModal';
 
         const components = options.components
@@ -673,17 +697,35 @@ class Components extends Complements {
             ? options.components
             : $("<form>", { novalidate: true, id: idFormulario, class: "" });
 
-
-
         let defaults = {
             id: idFormulario,
-            autofill:false,
+            autofill: false,
+            closeModal: true,
+            btnCancel: {
+                opc: "button",
+                id: 'btnExit',
+                inert: true,
+                className: "w-full",
+                onClick: () => CancelForm(),
+                text: "Cancelar",
+                color_btn: "outline-danger",
+                class: "col-6"
+            },
+            btnSuccess: {
+                opc: "button",
+                id: 'btnSuccess',
+                className: "w-full",
+                onClick: () => SuccessForm(),
+                text: "Aceptar",
+                class: "col-6"
+            },
+
             bootbox: {
                 title: 'Modal example',
                 closeButton: true,
                 message: components,
             },
-            json: [ {opc: 'label', text: 'Agrega tu formulario',class:'col-12' } ],
+            json: [{ opc: 'label', text: 'Agrega tu formulario', class: 'col-12' }],
             autovalidation: true,
             data: { opc: 'sendForm' }
         };
@@ -699,8 +741,8 @@ class Components extends Complements {
                     tipo: "text",
                     opc: "save-frm",
                 };
-                
-                $("#" + conf.id).validar_contenedor({tipo:'text'}, (ok) => {
+
+                $("#" + conf.id).validar_contenedor({ tipo: 'text' }, (ok) => {
                     let formData = new FormData($('#' + conf.id)[0]);
                     const datos = {};
                     formData.forEach((value, key) => (datos[key] = value));
@@ -716,19 +758,23 @@ class Components extends Complements {
                         data: data,
                         success: (request) => {
                             if (conf.success) conf.success(request);
-                            modal.modal('hide');
+                            if (conf.closeModal) modal.modal('hide');
                         }
                     })
                 });
             }
 
         }
-        
+
         let CancelForm = () => { modal.modal('hide'); }
-          
+
         conf.json.push(
-            { opc: "button", id: 'btnExit', inert:true, className: "w-full", onClick: () => CancelForm(), text: "Cancelar", color_btn: "outline-danger", class: "col-6" },
-            { opc: "button", id:'btnSuccess', className: "w-full", onClick: () => SuccessForm(), text: "Aceptar", class: "col-6" },
+            {
+                ...conf.btnSuccess
+            },
+            {
+                ...conf.btnCancel
+            },
         );
 
 
@@ -737,10 +783,10 @@ class Components extends Complements {
         $('#' + conf.id).content_json_form({ data: conf.json, type: '' });
 
 
-      
-        
+
+
         /* propiedades de autofill*/
-   
+
         if (conf.autofill) {
             // Init process auto inputs
             for (const frm in conf.autofill) {
@@ -767,7 +813,7 @@ class Components extends Complements {
 
 
 
-        
+
 
 
 
@@ -822,7 +868,7 @@ class Components extends Complements {
 
         //         // }).then(response => { }).then(data => {
 
-                     
+
         //         // })
 
 
@@ -937,8 +983,10 @@ class Components extends Complements {
         });
 
         for (const x of opts.data) {
+
             let active = "";
             let tab_active = "";
+
             if (x.active) {
                 active = "active";
                 tab_active = "show active";
@@ -948,12 +996,6 @@ class Components extends Complements {
                 class: "nav-item",
             });
 
-            // if(x.fn) 
-
-
-
-            // li.html(`<a class="nav-link ${active}" 
-            //     id="${x.id}-tab"  data-bs-toggle="tab" href="#${x.id}"  onclick="${x.fn}"> ${x.tab}</a>  `);
             li.append(
                 $('<a>', {
                     class: "nav-link " + active,
@@ -964,15 +1006,14 @@ class Components extends Complements {
                     text: x.tab
                 })
             );
+
             var div_tab = $("<div>", {
                 class: "tab-pane fade  mt-2 " + tab_active,
                 id: x.id,
             });
 
             if (x.contenedor) {
-                // let div_contenedor = $("<div>", {
-                //     class: "row",
-                // });
+
 
                 for (const y of x.contenedor) {
                     var div_cont = $("<div>", {
@@ -983,7 +1024,6 @@ class Components extends Complements {
                     div_tab.append(div_cont);
                 }
 
-                // div_tab.append(div_contenedor);
             }
 
             ul.append(li);
@@ -992,7 +1032,7 @@ class Components extends Complements {
 
         div.append(ul);
         div.append(div_content);
-        $(`#${opts.parent}`).html(div);
+        $(`#${opts.parent}`).append(div);
     }
 
     createLayaout(options = {}) {
@@ -1073,13 +1113,13 @@ class Components extends Complements {
 
     }
 
-    createNavBar(options){
- 
+    createNavBar(options) {
+
         let defaults = {
             logoSrc: 'https://erp-varoch.com/ERP2/src/img/logos/logo_icon_wh.png',
             logoAlt: 'Grupo Varoch',
             onLogoClick: 'location.reload()',
-            onMenuClick: '#',
+            onMenuClick: '',
             themeClass: 'bg-dia',
             menuItems: [
                 { icon: 'icon-sun-inv-1', visible: false },
@@ -1098,15 +1138,8 @@ class Components extends Complements {
         };
 
         let opts = $.extend({}, defaults, options);
-
-
-
-
-
         // Create header element
         let $header = $('<header>', { class: opts.themeClass });
-
-
         // Create section for logo and menu button
         let $section = $('<section>')
             .append(
@@ -1133,37 +1166,941 @@ class Components extends Complements {
                     }
                 })
             );
-
         $header.append($section);
-
         // Create nav element
         let $nav = $('<nav>');
         let $ul = $('<ul>', { class: 'theme', id: 'navbar' });
-
         // Create menu items
         opts.menuItems.forEach((item, index) => {
-            if (!item.visible) return; // Skip hidden items
-
+            if (!item.visible) return;  // Skip hidden items
             let $li = $('<li>', { id: item.id || null })
                 .append($('<i>', { class: item.icon }));
-
             if (item.submenu) {
                 let $submenu = $('<ul>').append(item.submenu);
                 $li.append($submenu);
             }
-
             $ul.append($li);
         });
-
         $nav.append($ul);
         $header.append($nav);
-
         // Append to body or specific parent
         $(opts.parent || 'body').prepend($header);
 
-        
 
     }
+
+    createTimeLine(options) {
+        let defaults = {
+            parent: "",
+            id: "historial",
+            data: [],
+            input_id: "iptHistorial",
+            class: "p-3 bg-gray-200 rounded-lg h-80 overflow-y-auto",
+            user_photo: "https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png",
+            icons: {
+                payment: "💵",
+                comment: "💬",
+                event: "📅",
+                default: "🔹"
+            }
+        };
+
+        let opts = Object.assign(defaults, options);
+        let historialContainer = $('<div>', { class: opts.class, id: opts.id });
+
+        // 📌 **Campo de Comentario**
+        let header = $('<div>', { class: "flex items-center gap-2 mb-3 bg-white p-2 rounded-md" }).append(
+            $('<img>', { src: opts.user_photo, class: "w-6 h-6 rounded-full", alt: "Usuario" }),
+            $('<input>', { id: opts.input_id, class: "w-full border-none outline-none bg-transparent text-sm", placeholder: "Añadir un Comentario..." })
+        );
+
+        historialContainer.append(header);
+
+        // 📜 **Contenedor de línea de tiempo**
+        let timeline = $('<div>', { class: "relative flex flex-col gap-4" });
+
+        // 📜 **Generar los elementos del historial**
+        opts.data.forEach((item, index) => {
+            let entry = $('<div>', { class: "flex items-start gap-3 relative" });
+
+            // 🔵 **Seleccionar el icono basado en el `type`**
+            let iconType = opts.icons[item.type] || opts.icons.default;
+
+            // 🔵 **Columna de iconos y líneas**
+            let iconContainer = $('<div>', { class: "flex flex-col items-center relative" }).append(
+                // Icono del evento
+                $('<div>', {
+                    class: "w-8 h-8 flex items-center justify-center bg-gray-300 text-white rounded-full",
+                    html: iconType
+                }),
+                // 📏 Línea de tiempo (solo si no es el último elemento)
+                index !== opts.data.length - 1
+                    ? $('<div>', { class: "w-[2px] min-h-[28px] bg-gray-400 flex-1 mt-2" })
+                    : ""
+            );
+
+            // 📝 **Fila con título y fecha alineados**
+            let titleRow = $('<div>', { class: "flex justify-between items-center w-full" }).append(
+                $('<span>', { class: "font-semibold", text: item.valor }), // Título
+                $('<small>', { class: "text-gray-500 text-xs", text: item.date }) // Fecha
+            );
+
+            // 💬 **Mensaje o descripción del evento**
+            let details = $('<div>', { class: "text-sm bg-white p-2 rounded-md shadow-md w-full" }).append(titleRow);
+
+            if (item.message) {
+                let messageBox = $('<div>', { class: " text-xs p-2 rounded-md mt-1", text: item.message });
+                details.append(messageBox);
+            }
+
+            entry.append(iconContainer, details);
+            timeline.append(entry);
+        });
+
+        historialContainer.append(timeline);
+
+        // Renderizar el componente
+        $('#' + opts.parent).append(historialContainer);
+    }
+
+    createButtonGroup(options) {
+
+        const icon_default = 'icon-shop';
+
+
+        let groups = {
+
+            parent: 'groupButtons',
+            cols: 'w-25 ',
+            size: 'sm',
+            fn: '',
+            onClick: '',
+            class: '',
+            data: [{
+                text: 'FRANCES',
+                color: 'primary',
+                icon: 'icon-shop',
+                id: '',
+
+            },
+            {
+                text: 'PASTELERIA',
+                color: 'outline-success',
+                icon: 'icon-shop',
+
+
+            },
+
+            ]
+
+        };
+
+
+        let configuration = Object.assign(groups, options);
+
+        let divs = $('<div>', { class: 'd-flex overflow-auto ' + configuration.class });
+
+
+        // Iterate over the group data and create buttons
+
+        if (!configuration.dataEl) {
+            configuration.data.forEach((item) => {
+
+                let btn = $('<a>', {
+                    class: `btn btn-${configuration.size} btn-${item.color} ${configuration.cols} me-1 d-flex flex-column align-items-center justify-content-center`,
+                    id: item.id,
+                    click: item.onClick,
+                    onclick: item.fn
+                });
+
+                if (item.type) {
+
+                    btn = $('<label>', {
+                        class: `btn z-index-0 btn-${configuration.size} btn-${item.color} ${configuration.cols} me-1 `,
+                        for: item.id,
+                        id: item.btnid || 'btnfile'
+                    });
+
+
+
+
+                    let ipt_file = $('<input>', {
+                        class: 'hide',
+                        type: 'file',
+                        accept: item.accept ? item.accept : '.xlsx, .xls',
+                        id: item.id,
+                        onchange: item.fn,
+                    });
+
+                    divs.append(ipt_file);
+
+                    // btn.append(counter);
+                }
+
+
+
+
+                if (item.icon) {
+                    let icon = $('<i>', { class: item.icon + ' d-block' });
+                    btn.append(icon);
+                }
+
+                if (item.text) {
+                    let span = $('<span>', { text: item.text });
+                    btn.append(span);
+                }
+
+                divs.append(btn);
+
+            });
+        } else {
+
+
+            let classDisabled = configuration.dataEl.disabled ? 'disabled' : '';
+
+            configuration.dataEl.data.forEach((item) => {
+
+                let props = {
+                    onclick: configuration.dataEl.onClick + `(${item.id})` || configuration.dataEl.fn + `(${item.id})`
+                }
+
+                if (configuration.onClick) {
+                    props = {
+                        click: configuration.onClick
+                    }
+                }
+
+
+                let btn = $('<a>', {
+                    class: `btn ${classDisabled} btn-outline-primary ${configuration.cols} d-flex me-1 flex-column w-100 align-items-center justify-content-center`, // Add dynamic color class
+                    id: item.id,
+                    ...props
+
+                });
+
+
+                var itemIcon = configuration.dataEl.icon ? configuration.dataEl.icon : '';
+
+
+                let icon = $('<i>', { class: 'ms-2  d-block ' + (item.icon ? item.icon : itemIcon) });
+
+                let span = $('<span>', { text: item.valor });
+
+                // if(item.id){
+
+                btn.append(icon, span);
+                // }else{
+                //     btn.append(span);
+
+                // }
+
+
+
+                divs.append(btn);
+            });
+
+
+        }
+
+
+        if (groups.parent) {
+
+            $('#' + groups.parent).html(divs);
+        } else {
+
+            return divs;
+        }
+
+
+        const cardPosGroup = document.getElementById(groups.parent);
+
+
+
+        // Agregar un evento de clic al contenedor
+        cardPosGroup.addEventListener('click', function (event) {
+
+
+
+            // // Verificar si el elemento clicado es un botón
+            if (event.target.closest('a')) {
+                // Seleccionar todos los botones
+                const buttons = cardPosGroup.querySelectorAll('a');
+
+                buttons.forEach(button => {
+                    button.classList.remove('active', 'btn-primary', 'text-white');
+                    button.classList.add('btn-outline-primary');
+                });
+
+                // Agregar las clases de estilo al botón clicado
+                const clickedButton = event.target.closest('a');
+                clickedButton.classList.add('active', 'btn-primary', 'text-white');
+                clickedButton.classList.remove('btn-outline-primary');
+
+            }
+        });
+
+
+
+
+
+
+    }
+
+    createGrid(options) {
+
+        let defaults = {
+
+            parent: '',
+            color: 'bg-default',
+            data: [{ id: 1, nombre: 'BOSQUE DE CHOCOLATE' }],
+            size: 'soft',
+            type: '',
+            image: true,
+            class: 'grid-container'
+
+        };
+
+        let opts = Object.assign(defaults, options);
+        let divs = $('<div>', { class: opts.class, id: 'gridcontainer' });
+
+
+        opts.data.forEach((element) => {
+
+
+
+            if (opts.type == 'catalog') {
+                var img = "https://15-92.com/ERP3/src/img/default_flower.png";
+                var grid_item = $('<div>', { class: ` ${opts.color} grid-item  `, onClick: element.onclick });
+                var link = (element.attr.src) ? element.attr.src : img;
+                var imagen = $('<img>', { src: link, class: 'col-12' });
+
+                // add image.
+                var details = $('<div>', { class: 'col-12 div1 pointer' }).append(imagen);
+
+                // add text. 
+                var description = $('<div>', { class: 'col-12 bg-primary d-flex flex-column pt-1 div2 pointer' });
+                var h6 = $('<label>', { text: element.nombre, class: 'fw-bold col-12' });
+                var sub = $('<sub>', { text: element.costo, class: 'fw-bold py-2' })
+
+                description.append(h6, sub);
+                // draw grid items.
+                grid_item.append(details, description);
+
+            } else if (opts.type == 'almacen') {
+                // Config. Evento onclick.
+
+                let props = {
+                    onclick: element.onclick
+                }
+                if (opts.onClick) {
+                    props = {
+                        click: opts.onClick
+                    }
+                }
+
+
+                // Config. disponibilidad.
+
+                const disp = element.disponible ? element.disponible : '';
+                var class_disp = element.disponible == 0 ? 'disabled bg-gray-200 text-gray-400' : 'hover:shadow-md hover:bg-slate-800 hover:text-gray-100 ';
+                var especial = element.especial ? element.especial : 0;
+                var price = especial > 0 ? element.especial : element.costo;
+
+                var card = $('<div>', {
+
+                    id: element.id,
+                    costo: price ? price : 0,
+                    class: 'card h-32 transition-all text-center pointer ' + class_disp,
+
+                    ...props
+                });
+
+
+
+                var details = $('<div>', { class: 'p-2 card-content flex flex-col py-3 gap-2 w-full ' });
+                var label = $('<label>', { text: element.nombre ? element.nombre : element.valor, class: 'fw-semibold text-uppercase text-xs' });
+                var precio = $('<label>', { class: ` ${especial > 0 ? ' text-lime-600 ' : ''} font-bold text-lg`, text: element.costo ? formatPrice(price) : '' });
+                var text_almacen = $('<span>', { class: `text-xs font-semibold ${disp == 0 ? 'text-red-400 font-bold' : 'text-gray-400'} `, html: disp == 0 ? 'Sin stock' : `disponibles: ` });
+
+                var almacen = $('<span>', { id: 'cantidad' + element.id, class: `text-xs font-semibold text-gray-400 `, html: disp == 0 ? '' : disp })
+
+                var container_disponibilidad = $('<div>', { class: 'flex justify-center items-center' }).append(text_almacen, almacen);
+                details.append(label, precio, container_disponibilidad);
+
+                card.append(details);
+                divs.append(card);
+
+
+
+            } else if (opts.type == 'pos') {
+
+                // Config. Evento onclick.
+
+                let props = {
+                    onclick: element.onclick
+                }
+                if (opts.onClick) {
+                    props = {
+                        click: opts.onClick
+                    }
+                }
+
+
+                const disp = element.disponible ? element.disponible : '';
+
+                var class_disp = element.disponible == 0 ? ' disabled bg-gray-200 text-gray-400' : 'hover:shadow-md hover:bg-slate-800 hover:text-gray-100 ';
+
+                var card = $('<div>', {
+
+                    id: element.id,
+                    costo: element.costo ? element.costo : 0,
+                    class: ' card h-52 transition-all text-center pointer ' + class_disp,
+
+                    ...props
+                });
+
+                // img
+
+                // Crear el enlace `<a>`
+                let enlace = $('<a>', { href: element.href || '#!' });
+
+                // Crear la imagen `<img>`
+
+                let containerImage = $('<div>', {
+                    class: 'w-100 h-32  p-1  rounded-lg flex-shrink-0 ',
+                }).append(
+                    $('<img>', {
+                        class: element.imgClass || ' rounded-lg object-cover object-center h-100 w-full p-1',
+                        src: element.src,
+                    })
+                );
+
+
+
+
+                let iconContainer = $('<div>', {
+                    class: ' mx-2 py-4 mt-2 bg-gray-100  rounded-lg text-center',
+                }).append($('<i>', { class: ' icon-birthday text-muted', style: 'font-size: 42px;' }));
+
+
+                // info and details
+
+                var details = $('<div>', { class: ' px-2 card-content flex flex-col py-2 gap-2 w-full ' });
+                var label = $('<label>', { text: element.nombre ? element.nombre : element.valor, class: ' fw-semibold text-uppercase text-xs' });
+                var precio = $('<label>', { class: 'text-sm font-bold pb-2', text: element.costo ? formatPrice(element.costo) : '' });
+
+
+                details.append(label, precio);
+                if (opts.image) {
+
+                    if (element.src) {
+
+                        card.append(containerImage, details);
+                    } else {
+
+                        card.append(iconContainer, details);
+                    }
+
+                } else {
+
+                    card.append(details);
+                }
+
+                divs.append(card);
+
+            } else {
+
+                let props = { // propiedades del evento click/onClick
+                    onclick: element.onclick
+                }
+                if (opts.onClick) {
+                    props = {
+                        click: opts.onClick
+                    }
+                }
+
+                var grid_item = $('<div>', {
+
+                    id: element.id,
+                    costo: element.costo ? element.costo : 0,
+                    class: ` ${opts.color} grid-item-${opts.size}  `,
+                    ...props
+                    // click: element.onclick ? element.onclick : opts.onClick 
+                });
+
+                // add cost.
+                var details = $('<div>', { class: 'col-12 pointer' });
+                var lbl = $('<label>', { text: element.costo ? formatPrice(element.costo) : '', class: 'col-12 fw-semibold py-2 text-muted' });
+                details.append(lbl);
+                // add text. 
+                var description = $('<div>', { class: 'col-12 fw-bold d-flex flex-column pt-1 div1 pointer' });
+                var label = $('<label>', { text: element.nombre ? element.nombre : element.valor, class: 'fw-bold col-12' });
+                description.append(label);
+                // draw grid items.
+                grid_item.append(description, details);
+
+            }
+
+            divs.append(grid_item);
+
+
+        });
+
+        $('#' + opts.parent).html(divs);
+
+    }
+
+    creategroupCard(options) {
+
+        let groups = {
+
+            parent: 'groupButtons',
+            cols: 'w-25 ',
+            size: 'sm',
+            type: 'group',
+            colors: 'bg-primary',
+            description: '',
+            titleGroup: 'Tiempo',
+            subtitleGroup: 'hrs',
+
+            data: [
+                {
+                    valor: 'Limpieza',
+                    color: 'outline-primary',
+                    icon: 'icon-shop',
+                    onClick: '',
+                    id: 1,
+                    puntaje: '0',
+                    obtenido: '0',
+                },
+                {
+                    valor: 'Terraza',
+                    color: 'outline-primary',
+                    icon: 'icon-shop',
+                    onClick: '',
+                    id: 2,
+                    puntaje: '0',
+                    obtenido: '0',
+
+                },
+
+
+            ],
+
+            styleCard: {
+
+                group: {
+                    class: 'category-card mb-3',
+
+
+
+                }
+
+            }
+
+        };
+
+
+
+        let opts = Object.assign(groups, options);
+
+        let divs = $('#' + opts.parent);
+        divs.empty();
+
+        // add title.
+
+        let title = $('<label>', { class: 'text-uppercase fw-bold text-muted', text: opts.title });
+        let descr = $('<p>', { class: 'mb-0', text: opts.description });
+
+        if (opts.title) divs.append(title);
+
+        // Verificar si opts.data está definido y no es null
+        if (opts.data) {
+            // console.log('cards',opts.data)
+
+            opts.data.map((El, index) => {
+
+                // category or group
+
+                if (opts.type == 'group') {
+
+                    // --- items / result
+
+                    let items = El.items ? El.items : '';
+                    let results = El.items ? El.result : ' ';
+
+                    let class_answered_group = '';
+                    if (items == results) { class_answered_group = 'answered'; }
+
+
+
+
+                    let btn = $('<div>', {
+                        class: `category-card mb-3 ${class_answered_group} `,
+                        id: El.id,
+                        onclick: El.onclick ? El.onclick : opts.fn + `(${El.id})`  // jQuery usa 'click' en lugar de 'onclick'
+                    });
+
+
+                    let span = $('<h6>', { class: 'text-uppercase fw-bold', text: El.valor });
+                    let puntaje = $('<p>', { class: 'mb-0 fw-semibold', style: 'font-size:1rem;', text: opts.titleGroup + ' : ' + El.totalTime });
+                    let total = $('<span>', { html: `Preguntas: ${results} / ${items}` });
+
+                    btn.append(span, total);
+                    divs.append(btn);
+                }
+
+                else if (opts.type == 'subgroup') {
+
+                    let items = El.items;
+                    let result = El.result;
+                    let class_success = (result == items) ? 'answered' : ' d-flex justify-content-center ';
+
+
+                    let btn = $('<div>', {
+                        class: `group-card mb-3 ${El.id != 0 ? class_success : ''} `,
+                        id: El.id,
+                        idGroup: El.idGroup || '',
+                        onclick: (El.onclick) ? El.onclick : opts.fn + `(${El.id})`
+                    });
+
+
+                    if (El.id != 0) {
+
+                        // add components.
+
+                        var label = $('<label>', { class: 'text-uppercase' }).text(El.text ? El.text : El.valor);
+                        var paragraph = $('<span>', { class: 'mb-0' }).html(`Preguntas: <br> ${result} / ${items}`);
+
+                        btn.append(label, paragraph);
+
+                    } else {
+
+                        let icon = $('<i>', { class: El.icon + ' fs-1  d-block' });
+                        var label = $('<label>', { class: 'text-uppercase' }).text(El.text ? El.text : El.valor);
+
+                        btn.append(icon, label);
+                    }
+
+
+                    divs.append(btn);
+
+                }
+
+                else if (opts.type == 'question') {
+
+                    let noIndex = index + 1;
+
+                    let class_success = El.answer ? 'answered' : '';
+
+                    let btn = $('<div>', {
+
+                        class: `question-card   mb-3 ${El.id != 0 ? class_success : ''} `,
+                        id: 'question_' + El.id,
+
+                        idQuestion: El.id,
+                        type: El.id_QuestionType,
+
+                        name: 'question',
+                        noIndex: noIndex,
+                        points: El.points ? El.points : 0,
+                        onclick: (El.onclick) ? El.onclick : opts.fn + `(event)`
+
+
+                    });
+
+
+
+                    if (El.id == 0) {
+
+                        btn = $('<div>', {
+                            class: `question-card bg-primary mb-3 `,
+                            onclick: (El.onclick) ? El.onclick : opts.fn + `(event)`
+
+                        });
+
+                        let icon = $('<i>', { class: El.icon + ' fs-1  d-block' });
+                        var label = $('<label>', { class: 'text-uppercase' }).text(El.text ? El.text : El.valor);
+
+                        btn.append(icon, label);
+
+                    }
+
+                    else {
+
+                        var text = El.valor;
+
+                        var label = $('<label>', { class: 'text-uppercase' }).text(El.valor ? text : El.text);
+
+                        btn.append(label);
+
+                    }
+
+                    divs.append(btn);
+
+                }
+
+                else if (opts.type == 'options') {
+
+                    let options = {
+                        id: El.id,
+                        data: El.groups
+                    };
+
+                    let btn = $('<div>', {
+                        class: `question-card pointer my-2 `,
+
+                    }).click(() => {
+
+                        opts.success(options)
+
+                    });
+
+                    let getout = 0;
+
+                    if (El.data.length) {
+                        getout = El.data[0].getout;
+                    }
+
+
+
+                    let label = $('<label>', { class: 'text-uppercase pointer ', text: El.valor });
+                    let span = $('<span>', { class: 'ms-auto text-primary pointer fw-bold ', text: getout, style: 'font-size:1.2rem;' });
+
+                    span.append($('<i>', { class: 'icon-logout' }));
+
+                    btn.append(label, span);
+
+
+
+
+                    divs.append(btn);
+
+
+                }
+
+
+
+            });
+
+
+        } else {
+
+            divs.append('No hay grupos definidos.');
+        }
+
+
+
+
+
+
+
+    }
+
+    createQuestionnaire(options) {
+        // ⚙️ **Definición de valores por defecto**
+        // add defaults
+        let defaults = {
+            parent: 'questionnaireContainer',
+            mainTitle: 'CUESTIONARIO DE VAROCH',
+            subTitle: 'Seleccione la respuesta adecuada para cada pregunta.',
+            data: [],
+            options: ['Muy mal', 'Mal', 'Regular', 'Bien', 'Muy bien']
+        };
+
+        // 🔄 **Mezclar valores por defecto con los proporcionados por el usuario**
+        let opts = Object.assign({}, defaults, options);
+
+        // 📜 **Contenedor principal del cuestionario**
+        let container = $('<div>', { class: 'questionnaire p-4 bg-gray-200 rounded-lg shadow-sm overflow-auto', id: opts.parent, style: 'max-height: 600px;' });
+
+        // 🏷️ **TÍTULO PRINCIPAL**
+        if (opts.mainTitle) {
+            let mainTitle = $('<h4>', { class: 'fw-bold text-uppercase mb-1', text: opts.mainTitle });
+            container.append(mainTitle);
+        }
+
+        // 📝 **SUBTÍTULO O INSTRUCCIONES**
+        if (opts.subTitle) {
+            let subTitle = $('<p>', { class: 'text-muted mb-3', text: opts.subTitle });
+            container.append(subTitle);
+        }
+
+        // 📌 **Iterar sobre las secciones del cuestionario**
+        opts.data.forEach(section => {
+            // 📦 **Contenedor de la sección**
+            let sectionContainer = $('<div>', { class: 'mb-4 p-4 bg-white rounded-md shadow-sm' });
+
+            // 🏷️ **Encabezado de la sección**
+            let header = $('<h6>', { class: 'fw-bold text-uppercase mb-2', text: section.title });
+            sectionContainer.append(header);
+
+            // ❓ **Generar cada pregunta dentro de la sección**
+            section.questions.forEach(question => {
+                // 📌 **Contenedor de la pregunta**
+                let questionContainer = $('<div>', { class: 'mb-3' });
+
+                // 📝 **Texto de la pregunta**
+                let questionText = $('<p>', { class: 'text-muted mb-1', text: question.text });
+
+                // 🎛️ **Contenedor de opciones de respuesta**
+                let buttonGroup = $('<div>', { class: 'relative flex grid grid-cols-5 gap-3' });
+
+                // 🔘 **Generar botones de opciones**
+                opts.options.forEach(opt => {
+                    let button = $('<button>', {
+                        class: 'btn btn-outline-secondary rounded-3 px-3 py-3 shadow-sm',
+                        text: opt,
+                        click: function () {
+                            $(this).siblings().removeClass('active btn-primary text-white').addClass('btn-outline-secondary');
+                            $(this).addClass('active btn-primary text-white').removeClass('btn-outline-secondary');
+                        }
+                    });
+                    buttonGroup.append(button);
+                });
+
+                questionContainer.append(questionText, buttonGroup);
+                sectionContainer.append(questionContainer);
+            });
+
+            container.append(sectionContainer);
+        });
+
+        // 🎯 **Renderizar el cuestionario en el contenedor padre**
+        $('#' + opts.parent).html(container);
+    }
+
+    createTableForm(options) {
+
+        // 📜 ** Definición de configuración por defecto **
+
+        let defaults = {
+            id: options.id || 'root', // Identificador de referencia
+            parent: 'root',
+            title: '',
+            classForm: 'col-12 border rounded-3 p-3',
+            success: (data) => { },
+            table: {
+                id: 'contentTable',
+                parent: 'contentTable' + (options.id || 'root'),
+                idFilterBar: 'filterBar',
+                message: false,
+                data: { opc: "ls" },
+                attr: {
+                    color_th: 'bg-[#374151] text-white',
+                },
+                conf: {
+                    datatable: false,
+                    fn_datatable: 'simple_data_table',
+                    beforeSend: false,
+                    pag: 10,
+                },
+
+            },
+
+            form: {
+                parent: 'contentForm',
+                id: 'formRecetas',
+                autovalidation: true,
+                plugin: 'content_json_form',
+                json: [
+                    { opc: "input", lbl: "Nombre", id: "nombre", class: "col-12", tipo: "texto", required: true },
+                    {
+                        opc: "select", lbl: "Categoría", id: "categoria", class: "col-12", data: [
+
+                            { id: "1", valor: "Platillo" },
+                            { id: "2", valor: "Bebida" },
+                            { id: "3", valor: "Extras" }
+                        ]
+                    },
+                    { opc: "input", lbl: "Cantidad", id: "cantidad", class: "col-12", tipo: "numero" },
+                    { opc: "btn-submit", id: "btnAgregar", text: "Agregar", class: "col-12" }
+                ],
+
+                success: (data) => { }
+
+
+
+            },
+
+            success: (data) => {
+
+            }
+        };
+
+        let opts = this.ObjectMerge(defaults, options);
+
+        // 🔵 Corrección del error en la asignación de `success`
+        opts.form.success = (data) => {
+            this.createTable(opts.table);
+            opts.success(data);
+            $('#contentForm')[0].reset();
+
+        };
+
+        // 📜 **Funciones para abrir y cerrar el formulario**
+        const OpenForm = (form, tb, btn) => {
+            $(tb).removeClass("col-md-12").addClass("col-md-8");
+            $(form).parent().removeClass("d-none");
+            $(btn).addClass("d-none");
+        };
+
+        const closeForm = (form, tb, btn) => {
+            $(form).parent().addClass("d-none");
+            $(tb).removeClass("col-md-8").addClass("col-md-12");
+            $(btn).removeClass("d-none");
+        };
+
+
+        // 🔵 **Generación del Layout sin usar primaryLayout**
+
+
+        let layout = `
+        <div class="row p-2">
+
+            <div class="col-12 col-md-4 p-3 m-0">
+                
+            <div class="${opts.classForm}" id="${opts.form.id}" novalidate>
+                <div class="col-12 mb-2 d-flex justify-content-between">
+                        <span class="fw-bold fs-5">${opts.title}</span>
+                        <button type="button" class="btn-close" aria-label="Close" id="btnClose" ></button>
+                        </div>
+                        <form class="mt-3 " id="${opts.form.parent}" ></form>
+                </div>
+
+            </div>
+            
+            <div class="col-12 col-md-8" id="layoutTable">
+            <div class="">
+                <button type="button" class="btn btn-primary btn-sm d-none" id="addRecetasSub">
+                <i class="icon-plus"></i></button>
+            </div>
+
+            <div class="m-0 p-0" id="${opts.table.parent}">
+               
+            </div>
+            </div>
+        </div>`;
+
+        $("#" + opts.parent).append(layout);
+
+        // 📜 **Asignar eventos después de agregar el layout**
+        $("#btnClose").on("click", function () {
+            closeForm(`#${opts.form.id}`, "#layoutTable", "#addRecetasSub");
+        });
+
+        $("#addRecetasSub").on("click", function () {
+            OpenForm(`#${opts.form.id}`, "#layoutTable", "#addRecetasSub");
+        });
+
+        // Renderizar el formulario y la tabla
+        this.createForm(opts.form);
+        this.createTable(opts.table);
+    }
+
+    // ADD COMMENTS
+
+
 
 
 
@@ -1361,12 +2298,15 @@ class Templates extends Components {
         let defaults = {
             id: name,
             parent: this._div_modulo,
-            class: "d-flex mx-2 my-2 h-100",
+            // class: "d-flex mx-2 my-2 h-full",
+            class: "flex flex-col p-2 h-full",
+            json: [],
+            data: [],
             card: {
-                name: "singleLayout",
-                class: "col-12",
-                filterBar: { class: 'w-full line', id: 'filterBar' + name },
-                container: { class: 'w-full my-2 line', id: 'container' + name }
+                name: "containerLayout",
+                class: "flex flex-col h-full",
+                filterBar: { class: 'h-[10%] line', id: 'filterBar' + name },
+                container: { class: 'h-[90%] mt-2 line', id: 'container' + name }
             }
         };
 
@@ -1445,14 +2385,14 @@ class Templates extends Components {
             className: 'flex p-2 ',
             cardtable: {
                 className: 'col-7 line',
-                id: 'containerTable'+name,
+                id: 'containerTable' + name,
                 filterBar: { id: 'filterTable', className: 'col-12 mb-2 line' },
                 container: { id: 'listTable', className: 'col-12 line' },
             },
             cardform: {
                 className: 'col-5 line',
-                id: 'containerForm'+name,
-               
+                id: 'containerForm' + name,
+
             },
         };
 
@@ -1468,9 +2408,9 @@ class Templates extends Components {
                     type: 'div',
                     id: ui.cardform.id,
                     class: ui.cardform.className,
-                   
+
                 },
-               
+
                 {
                     type: "div",
                     id: ui.cardtable.id,
@@ -1481,7 +2421,7 @@ class Templates extends Components {
                     ]
                 },
 
-               
+
             ],
         };
 
@@ -1499,12 +2439,21 @@ class Templates extends Components {
         ];
         let defaults = {
             parent: 'tabsLayout',
+            class: 'h-full',
+            options: {
+                class_tab_content: 'h-full flex-grow flex flex-col'
+            },
             id: 'tabs',
             json: jsonTabs
         };
 
         let opts = Object.assign(defaults, components);
-        $(`#${opts.parent}`).simple_json_tab({ data: opts.json });
+        $(`#${opts.parent}`).simple_json_tab({
+            data: opts.json,
+            // class  : opts.class,
+            // id     : opts.id,
+            // options: opts.options
+        });
     }
 }
 
