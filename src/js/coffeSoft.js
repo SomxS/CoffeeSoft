@@ -2167,7 +2167,6 @@ class Components extends Complements {
 
 
         // Generación de columnas de encabezado
-        console.log(opts.data.thead)
         if (opts.data.thead) {
             if (opts.extends) {
                 const columnHeaders = opts.data.thead;
