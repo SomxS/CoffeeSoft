@@ -2165,7 +2165,7 @@ class Components extends Complements {
 
         if (opts.title) {
             const titleRow = $(`
-            <div class="flex flex-col px-4 py-3 ">
+            <div class="flex flex-col py-1 ">
                 <span class="text-lg font-semibold ${opts.dark ? 'text-gray-100' : 'text-gray-800'}">${opts.title}</span>
                 ${opts.subtitle ? `<p class="text-sm ${opts.dark ? 'text-gray-400' : 'text-gray-600'} mt-1">${opts.subtitle}</p>` : ''}
             </div>`);
