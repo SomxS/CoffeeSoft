@@ -2,7 +2,7 @@
 // init vars.
 let app, sub;
 
-let api = "https://huubie.com.mx/alpha/eventos/ctrl/ctrl-eventos.php";
+let api = "https://erp-varoch.com/DEV/ch/ctrl/ctrl-tabulacion.php";
 
 
 $(async () => {
@@ -62,12 +62,14 @@ class App extends Templates {
         this.createTable({
             parent: "container-recorder",
             idFilterBar: "filterBarEventos",
-            data: { opc: 'lsVentas', fi: '2025-05-01', ff: '2025-05-31', status: 0 },
+            data: { opc: 'list', fi: '2025-05-01', ff: '2025-05-31', udn:0,status: 0 },
             conf: { datatable: true, pag: 15 },
             coffeesoft: true,
             attr: {
                 id: "tablaEventos",
                 theme:'light',
+                title:'Tabulaciones',
+                subtitle:'Listado de tabulaciones por unidad de negocio y temporada',
                 striped:true,
                 center: [1, 2, 3, 6, 7],
                 extends: true,

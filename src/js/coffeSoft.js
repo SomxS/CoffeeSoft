@@ -195,33 +195,24 @@ class Components extends Complements {
     createTable(options) {
 
         var defaults = {
-
             extends: false,
             parent: this.div_modulo,
             idFilterBar: '',
-
             parent: 'lsTable',
             coffeesoft: false,
-
             conf: {
                 datatable: true,
                 fn_datatable: 'simple_data_table',
                 beforeSend: true,
                 pag: 15,
             },
-
             methods: {
                 send: (data) => { }
             }
-
-
         };
 
         // configurations.
         const dataConfig = Object.assign(defaults.conf, options.conf);
-
-        console.log('dataConfig', dataConfig);
-
 
         let opts = Object.assign(defaults, options);
         const idFilter = options.idFilterBar ? options.idFilterBar : '';
@@ -2256,7 +2247,7 @@ class Components extends Complements {
                 tr.append(td);
             });
 
-            const actions = $("<td>", { class: `px-3 py-2 flex gap-2 justify-end items-center ${colorBg} ${opts.border_row}` });
+            const actions = $("<td>", { class: `px-2 py-2 flex gap-1 justify-center items-center ${colorBg} ${opts.border_row}` });
 
             if (data.a?.length) {
                 data.a.forEach(atributos => {
