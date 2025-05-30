@@ -2137,30 +2137,30 @@ class Components extends Complements {
             defaults.color_row = "bg-[#1E293B] text-white";
             defaults.color_group = "bg-[#334155] text-white";
             defaults.class = "w-full table-auto text-sm text-white";
-            defaults.border_table = "border border-gray-600";
+            defaults.border_table = "";
             defaults.border_row = "border-t border-gray-700";
             defaults.color_row_alt = "bg-[#111827]";
         } else if (options.theme === 'corporativo') {
-            defaults.color_th = "bg-[#003360] text-white";
-            defaults.color_row = "bg-white ";
-            defaults.color_group = "bg-[#D0E3FF] ";
-            defaults.class = "w-full table-auto text-sm ";
-            defaults.border_table = "border border-gray-300";
-            defaults.border_row = "border-t border-gray-300";
-            defaults.color_row_alt = "bg-gray-200";
-        } else {
-            defaults.color_th = "bg-gray-100 text-gray-600";
-            defaults.color_row = "bg-white hover:bg-gray-600";
-            defaults.color_group = "bg-gray-200";
-            defaults.class = "w-full table-auto text-sm text-gray-800";
-            defaults.border_table = "border border-gray-300";
-            defaults.border_row = "border-t border-gray-200";
+            defaults.color_th      = "bg-[#003360] text-white";
+            defaults.color_row     = "bg-white ";
+            defaults.color_group   = "bg-[#D0E3FF] ";
+            defaults.class         = "w-full text-sm ";
+            defaults.border_table = "border rounded-lg  border-gray-300";
+            defaults.border_row    = "border-t border-gray-300";
             defaults.color_row_alt = "bg-gray-100";
+        } else {
+            defaults.color_th = "bg-[#F2F5F9] text-[#003360]";
+            defaults.color_row     = "bg-white hover:bg-gray-600";
+            defaults.color_group   = "bg-gray-200";
+            defaults.class         = "w-full table-auto text-sm text-gray-800";
+            defaults.border_table = "border rounded-lg  border-gray-300";
+            defaults.border_row    = "border-t border-gray-200";
+            defaults.color_row_alt = "bg-gray-50";
         }
 
         const opts = Object.assign({}, defaults, options);
         const container = $("<div>", {
-            class: "rounded-lg overflow-hidden my-5",
+            class: "rounded-lg h-full table-responsive ",
         });
 
         if (opts.title) {
@@ -2172,7 +2172,7 @@ class Components extends Complements {
             container.append(titleRow);
         }
 
-        const table = $("<table>", { id: opts.id, class: `  ${opts.border_table} ${opts.class}` });
+        const table = $("<table>", { id: opts.id, class: ` border-separate border-spacing-0 ${opts.border_table} ${opts.class}` });
         const thead = $("<thead>");
 
         if (opts.data.thead) {
@@ -2306,6 +2306,13 @@ class Components extends Complements {
         table.append(tbody);
         container.append(table);
         $(`#${opts.parent}`).html(container);
+
+        $("<style>").text(`
+        #${opts.id} th:first-child { border-top-left-radius: 0.5rem; }
+        #${opts.id} th:last-child { border-top-right-radius: 0.5rem; }
+        #${opts.id} tr:last-child td:first-child { border-bottom-left-radius: 0.5rem; }
+        #${opts.id} tr:last-child td:last-child { border-bottom-right-radius: 0.5rem; }
+        `).appendTo("head");
     }
 
 

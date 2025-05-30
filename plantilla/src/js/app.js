@@ -67,8 +67,8 @@ class App extends Templates {
             coffeesoft: true,
             attr: {
                 id: "tablaEventos",
-                theme:'',
-                striped:false,
+                theme:'light',
+                striped:true,
                 center: [1, 2, 3, 6, 7],
                 extends: true,
             },
