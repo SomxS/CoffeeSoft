@@ -220,11 +220,11 @@ class Components extends Complements {
         // configurations.
         const dataConfig = Object.assign(defaults.conf, options.conf);
 
+        console.log('dataConfig', dataConfig);
+
 
         let opts = Object.assign(defaults, options);
         const idFilter = options.idFilterBar ? options.idFilterBar : '';
-
-
 
         if (idFilter) { // se activo la validacion por filtro
 
