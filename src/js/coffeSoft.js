@@ -2106,195 +2106,207 @@ class Components extends Complements {
     }
 
     createCoffeTable(options) {
-    const defaults = {
-        theme: 'light',
-        subtitle: null,
-        dark: false,
-        parent: "root",
-        id: "coffeeSoftGridTable",
-        title: null,
-        data: { thead: [], row: [] },
-        center: [],
-        right: [],
-        color_th: "bg-[#003360] text-gray-100",
-        color_row: "bg-white hover:bg-gray-50",
-        color_group: "bg-gray-200",
-        class: "w-full table-auto text-sm text-gray-800",
-        onEdit: () => { },
-        onDelete: () => { },
-        extends: true,
-        f_size: 14,
-        includeColumnForA: false,
-        border_table: "border border-gray-300",
-        border_row: "border-t border-gray-200",
-        color_row_alt : "bg-gray-100",
-        striped: true
-    };
+        const defaults = {
+            theme: 'light',
+            subtitle: null,
+            dark: false,
+            parent: "root",
+            id: "coffeeSoftGridTable",
+            title: null,
+            data: { thead: [], row: [] },
+            center: [],
+            right: [],
+            color_th: "bg-[#003360] text-gray-100",
+            color_row: "bg-white hover:bg-gray-50",
+            color_group: "bg-gray-200",
+            class: "w-full table-auto text-sm text-gray-800",
+            onEdit: () => { },
+            onDelete: () => { },
+            extends: true,
+            f_size: 14,
+            includeColumnForA: false,
+            border_table: "border border-gray-300",
+            border_row: "border-t border-gray-200",
+            color_row_alt: "bg-gray-100",
+            striped: false
+        };
 
-    if (options.theme === 'dark') {
-        defaults.dark = true;
-        defaults.color_th = "bg-[#0F172A] text-white";
-        defaults.color_row = "bg-[#1E293B] text-white";
-        defaults.color_group = "bg-[#334155] text-white";
-        defaults.class = "w-full table-auto text-sm text-white";
-        defaults.border_table = "border border-gray-600";
-        defaults.border_row = "border-t border-gray-700";
-        defaults.color_row_alt = "bg-[#111827]";
-    } else if (options.theme === 'corporativo') {
-        defaults.color_th = "bg-[#003360] text-white";
-        defaults.color_row = "bg-white ";
-        defaults.color_group = "bg-[#D0E3FF] ";
-        defaults.class = "w-full table-auto text-sm ";
-        defaults.border_table = "border border-gray-300";
-        defaults.border_row = "border-t border-gray-300";
-        defaults.color_row_alt = "bg-gray-100";
-    } else {
-        defaults.color_th = "bg-gray-200 text-gray-600";
-        defaults.color_row = "bg-white hover:bg-gray-600";
-        defaults.color_group = "bg-gray-200";
-        defaults.class = "w-full table-auto text-sm text-gray-800";
-        defaults.border_table = "border border-gray-300";
-        defaults.border_row = "border-t border-gray-200";
-        defaults.color_row_alt = "bg-gray-100";
-    }
+        if (options.theme === 'dark') {
+            defaults.dark = true;
+            defaults.color_th = "bg-[#0F172A] text-white";
+            defaults.color_row = "bg-[#1E293B] text-white";
+            defaults.color_group = "bg-[#334155] text-white";
+            defaults.class = "w-full table-auto text-sm text-white";
+            defaults.border_table = "border border-gray-600";
+            defaults.border_row = "border-t border-gray-700";
+            defaults.color_row_alt = "bg-[#111827]";
+        } else if (options.theme === 'corporativo') {
+            defaults.color_th = "bg-[#003360] text-white";
+            defaults.color_row = "bg-white ";
+            defaults.color_group = "bg-[#D0E3FF] ";
+            defaults.class = "w-full table-auto text-sm ";
+            defaults.border_table = "border border-gray-300";
+            defaults.border_row = "border-t border-gray-300";
+            defaults.color_row_alt = "bg-gray-200";
+        } else {
+            defaults.color_th = "bg-gray-100 text-gray-600";
+            defaults.color_row = "bg-white hover:bg-gray-600";
+            defaults.color_group = "bg-gray-200";
+            defaults.class = "w-full table-auto text-sm text-gray-800";
+            defaults.border_table = "border border-gray-300";
+            defaults.border_row = "border-t border-gray-200";
+            defaults.color_row_alt = "bg-gray-100";
+        }
 
-    const opts = Object.assign({}, defaults, options);
-    const container = $("<div>", {
-        class: "rounded-md overflow-hidden my-5",
-    });
+        const opts = Object.assign({}, defaults, options);
+        const container = $("<div>", {
+            class: "rounded-lg overflow-hidden my-5",
+        });
 
-    if (opts.title) {
-        const titleRow = $(`
-            <div class="flex flex-col px-4 py-3 border-b ${opts.dark ? 'border-gray-700 bg-gray-800' : 'border-gray-300 bg-white'}">
+        if (opts.title) {
+            const titleRow = $(`
+            <div class="flex flex-col px-4 py-3  border-b ${opts.dark ? 'border-gray-700 bg-gray-800' : 'border-gray-300 bg-white'}">
                 <h2 class="text-base font-semibold ${opts.dark ? 'text-gray-100' : 'text-gray-800'}">${opts.title}</h2>
                 ${opts.subtitle ? `<p class="text-sm ${opts.dark ? 'text-gray-400' : 'text-gray-600'} mt-1">${opts.subtitle}</p>` : ''}
             </div>`);
-        container.append(titleRow);
-    }
+            container.append(titleRow);
+        }
 
-    const table = $("<table>", { id: opts.id, class: `border ${opts.border_table} ${opts.class}` });
-    const thead = $("<thead>");
+        const table = $("<table>", { id: opts.id, class: `  ${opts.border_table} ${opts.class}` });
+        const thead = $("<thead>");
 
-    if (opts.data.thead) {
-        if (opts.extends) {
-            const columnHeaders = opts.data.thead;
-            if (Array.isArray(columnHeaders)) {
-                const headerRow = $('<tr>');
-                columnHeaders.forEach(column => {
-                    if (typeof column === 'string') {
-                        headerRow.append(`<th class="text-center px-3 py-2 ${opts.color_th}">${column}</th>`);
-                    } else {
-                        const complexHeaderRow = $('<tr>');
-                        Object.keys(column).forEach(key => {
-                            const cell = (typeof column[key] === 'object')
-                                ? $('<th>', column[key])
-                                : $('<th>', { text: column[key], class: `text-center ${opts.color_th}` });
-                            complexHeaderRow.append(cell);
-                        });
-                        thead.append(complexHeaderRow);
-                    }
-                });
-                thead.append(headerRow);
-            } else {
-                columnHeaders.forEach(columnGroup => {
-                    const headerGroup = $("<tr>");
-                    Object.keys(columnGroup).forEach(key => {
-                        const cell = (typeof columnGroup[key] === 'object')
-                            ? $('<th>', columnGroup[key])
-                            : $('<th>', { text: key });
-                        headerGroup.append(cell);
+        if (opts.data.thead) {
+            if (opts.extends) {
+                const columnHeaders = opts.data.thead;
+                if (Array.isArray(columnHeaders)) {
+                    const headerRow = $('<tr>');
+                    columnHeaders.forEach(column => {
+                        if (typeof column === 'string') {
+                            headerRow.append(`<th class="text-center px-3 py-2 ${opts.color_th}">${column}</th>`);
+                        } else {
+                            const complexHeaderRow = $('<tr>');
+                            Object.keys(column).forEach(key => {
+                                const cell = (typeof column[key] === 'object')
+                                    ? $('<th>', column[key])
+                                    : $('<th>', { text: column[key], class: `text-center ${opts.color_th}` });
+                                complexHeaderRow.append(cell);
+                            });
+                            thead.append(complexHeaderRow);
+                        }
                     });
-                    thead.append(headerGroup);
+                    thead.append(headerRow);
+                } else {
+                    columnHeaders.forEach(columnGroup => {
+                        const headerGroup = $("<tr>");
+                        Object.keys(columnGroup).forEach(key => {
+                            const cell = (typeof columnGroup[key] === 'object')
+                                ? $('<th>', columnGroup[key])
+                                : $('<th>', { text: key });
+                            headerGroup.append(cell);
+                        });
+                        thead.append(headerGroup);
+                    });
+                }
+            } else {
+                const simpleHeaderRow = $('<tr>');
+                opts.data.thead.forEach(header => {
+                    simpleHeaderRow.append(`<th class="text-center px-3 py-2 capitalize ${opts.color_th}">${header}</th>`);
                 });
+                thead.append(simpleHeaderRow);
             }
         } else {
-            const simpleHeaderRow = $('<tr>');
-            opts.data.thead.forEach(header => {
-                simpleHeaderRow.append(`<th class="text-center px-3 py-2 capitalize ${opts.color_th}">${header}</th>`);
-            });
-            thead.append(simpleHeaderRow);
-        }
-    } else {
-        const autoHeaderRow = $("<tr>");
-        for (let clave in opts.data.row[0]) {
-            if (clave != "opc" && clave != "id") {
-                clave = (clave == 'btn' || clave == 'btn_personalizado' || clave == 'a' || clave == 'dropdown') ? '<i class="icon-gear"> </i>' : clave;
-                autoHeaderRow.append($("<th>", {
-                    class: `px-3 py-2 ${opts.color_th} capitalize text-center font-semibold`,
-                    style: `font-size:${opts.f_size}px;`
-                }).html(clave));
-            }
-        }
-        thead.append(autoHeaderRow);
-    }
-
-    table.append(thead);
-    const tbody = $("<tbody>");
-
-    opts.data.row.forEach((data, i) => {
-        const colorBg = opts.striped && i % 2 === 0 ? opts.color_row_alt : opts.color_row;
-        const tr = $("<tr>", {
-            class: `${colorBg} ${opts.border_row}`,
-        });
-
-        Object.keys(data).forEach((key, colIndex) => {
-            if (["btn", "a", "dropdown", "id"].includes(key)) return;
-
-            const align =
-                opts.center.includes(colIndex) ? "text-center" :
-                    opts.right.includes(colIndex) ? "text-right" : "text-left";
-
-                    
-
-            const td = $("<td>", {
-                id: `${key}_${data.id}`,
-                style: `font-size:${opts.f_size}px;`,
-                class: `${align} px-3 py-2 truncate`,
-                html: data[key],
-            });
-
-            tr.append(td);
-        });
-
-        const actions = $("<td>", { class: "px-3 py-2 flex gap-2 justify-end items-center" });
-
-        if (data.dropdown) {
-            const wrapper = $("<div>", {
-                class: "relative"
-            });
-
-            const btn = $("<button>", {
-                class: "icon-dot-3 text-gray-600 hover:text-blue-600",
-                click: function (e) {
-                    e.stopPropagation();
-                    $(this).next("ul").toggle();
+            const autoHeaderRow = $("<tr>");
+            for (let clave in opts.data.row[0]) {
+                if (clave != "opc" && clave != "id") {
+                    clave = (clave == 'btn' || clave == 'btn_personalizado' || clave == 'a' || clave == 'dropdown') ? '<i class="icon-gear"> </i>' : clave;
+                    autoHeaderRow.append($("<th>", {
+                        class: `px-3 py-2 ${opts.color_th} capitalize text-center font-semibold`,
+                        style: `font-size:${opts.f_size}px;`
+                    }).html(clave));
                 }
-            });
-
-            const menu = $("<ul>", {
-                class: "absolute right-0 mt-2 w-44 z-10 bg-white border rounded-md shadow-md hidden",
-            });
-
-            data.dropdown.forEach((item) =>
-                menu.append(`
-                    <li><a onclick="${item.onclick}"text-left class="block px-4 py-2 text-sm hover:bg-gray-100 text-gray-800">
-                    <i class="${item.icon} "></i> ${item.text}</a></li>
-                `)
-            );
-
-            wrapper.append(btn, menu);
-            actions.append(wrapper);
-            $(document).on("click", () => menu.hide());
+            }
+            thead.append(autoHeaderRow);
         }
 
-        tr.append(actions);
-        tbody.append(tr);
-    });
+        table.append(thead);
+        const tbody = $("<tbody>");
 
-    table.append(tbody);
-    container.append(table);
-    $(`#${opts.parent}`).html(container);
-}
+        opts.data.row.forEach((data, i) => {
+            const colorBg = opts.striped && i % 2 === 0 ? opts.color_row_alt : opts.color_row;
+            const tr = $("<tr>", {
+                class: ``,
+            });
+
+            Object.keys(data).forEach((key, colIndex) => {
+                if (["btn", "a", "dropdown", "id"].includes(key)) return;
+
+                const align =
+                    opts.center.includes(colIndex) ? "text-center" :
+                        opts.right.includes(colIndex) ? "text-right" : "text-left";
+
+
+
+                const td = $("<td>", {
+                    id: `${key}_${data.id}`,
+                    style: `font-size:${opts.f_size}px;`,
+                    class: `${align} px-3 py-2 truncate  ${colorBg} ${opts.border_row}`,
+                    html: data[key],
+                });
+
+                tr.append(td);
+            });
+
+            const actions = $("<td>", { class: `px-3 py-2 flex gap-2 justify-end items-center ${colorBg} ${opts.border_row}` });
+
+            if (data.a?.length) {
+                data.a.forEach(atributos => {
+
+                    const button_a = $("<a>", atributos);
+                    actions.append(button_a);
+                });
+                tr.append(actions);
+            }
+
+            if (data.dropdown) {
+                const wrapper = $("<div>", {
+                    class: "relative"
+                });
+
+                const btn = $("<button>", {
+                    class: "icon-dot-3 text-gray-600 hover:text-blue-600",
+                    click: function (e) {
+                        e.stopPropagation();
+                        $(this).next("ul").toggle();
+                    }
+                });
+
+                const menu = $("<ul>", {
+                    class: "absolute right-0 mt-2 w-44 z-10 bg-white border rounded-md shadow-md hidden",
+                });
+
+                data.dropdown.forEach((item) =>
+                    menu.append(`
+                    <li><a onclick="${item.onclick}"text-left class="block px-4 py-2 text-sm hover:bg-gray-100 text-gray-800">
+                    <i class="${item.icon} "></i> ${item.text}</a></li>`)
+                );
+
+
+
+
+
+                wrapper.append(btn, menu);
+                actions.append(wrapper);
+                $(document).on("click", () => menu.hide());
+            }
+
+            tr.append(actions);
+            tbody.append(tr);
+        });
+
+        table.append(tbody);
+        container.append(table);
+        $(`#${opts.parent}`).html(container);
+    }
 
 
     tabLayout(options) {
