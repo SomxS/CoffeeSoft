@@ -2114,7 +2114,7 @@ class Components extends Complements {
             onEdit: () => { },
             onDelete: () => { },
             extends: true,
-            f_size: 14,
+            f_size: 12,
             includeColumnForA: false,
             border_table: "border border-gray-300",
             border_row: "border-t border-gray-200",
@@ -2156,7 +2156,7 @@ class Components extends Complements {
 
         if (opts.title) {
             const titleRow = $(`
-            <div class="flex flex-col py-1 ">
+            <div class="flex flex-col py-2 ">
                 <span class="text-lg font-semibold ${opts.dark ? 'text-gray-100' : 'text-gray-800'}">${opts.title}</span>
                 ${opts.subtitle ? `<p class="text-sm ${opts.dark ? 'text-gray-400' : 'text-gray-600'} mt-1">${opts.subtitle}</p>` : ''}
             </div>`);
@@ -2186,6 +2186,7 @@ class Components extends Complements {
                         }
                     });
                     thead.append(headerRow);
+
                 } else {
                     columnHeaders.forEach(columnGroup => {
                         const headerGroup = $("<tr>");
@@ -2211,7 +2212,7 @@ class Components extends Complements {
                 if (clave != "opc" && clave != "id") {
                     clave = (clave == 'btn' || clave == 'btn_personalizado' || clave == 'a' || clave == 'dropdown') ? '<i class="icon-gear"> </i>' : clave;
                     autoHeaderRow.append($("<th>", {
-                        class: `px-3 py-2 ${opts.color_th} capitalize text-center font-semibold`,
+                        class: `px-2 py-2 ${opts.color_th} capitalize text-center font-semibold`,
                         style: `font-size:${opts.f_size}px;`
                     }).html(clave));
                 }
