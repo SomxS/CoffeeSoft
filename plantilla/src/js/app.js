@@ -2,7 +2,7 @@
 // init vars.
 let app, sub;
 
-let api = "https://erp-varoch.com/DEV/ch/ctrl/ctrl-tabulacion.php";
+let api = "https://erp-varoch.com/DEV/ch/ctrl/ctrl-tabulacion-calificaciones.php";
 
 
 $(async () => {
@@ -62,8 +62,8 @@ class App extends Templates {
         this.createTable({
             parent: "container-recorder",
             idFilterBar: "filterBarEventos",
-            data: { opc: 'list', fi: '2025-05-01', ff: '2025-05-31', udn:0,status: 0 },
-            conf: { datatable: true, pag: 15 },
+            data: { opc: 'list', id:11},
+            conf: { datatable: false, pag: 15 },
             coffeesoft: true,
             attr: {
                 id: "tablaEventos",
@@ -75,7 +75,7 @@ class App extends Templates {
                 extends: true,
             },
         });
-        
+
     }
 
 

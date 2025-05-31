@@ -454,7 +454,7 @@ class Components extends Complements {
             required: true,
         };
 
-        let opts = Object.assign(defaults, options); // Union de 
+        let opts = Object.assign(defaults, options); // Union de
 
         // Creamos el contenedor
         var div = $("<div>", { class: opts.class, id: opts.id });
@@ -687,7 +687,7 @@ class Components extends Complements {
     }
 
     createModalForm(options) {
-        // id 
+        // id
         const idFormulario = options.id ? options.id : 'frmModal';
 
         const components = options.components
@@ -946,7 +946,7 @@ class Components extends Complements {
 
         };
 
-        //  Combinar objetos 
+        //  Combinar objetos
         let opts = Object.assign(defaults, options);
         $(`#${opts.parent}`).content_json_form({ data: opts.data, type: '', id: opts.id });
 
@@ -1475,7 +1475,7 @@ class Components extends Complements {
                 // add image.
                 var details = $('<div>', { class: 'col-12 div1 pointer' }).append(imagen);
 
-                // add text. 
+                // add text.
                 var description = $('<div>', { class: 'col-12 bg-primary d-flex flex-column pt-1 div2 pointer' });
                 var h6 = $('<label>', { text: element.nombre, class: 'fw-bold col-12' });
                 var sub = $('<sub>', { text: element.costo, class: 'fw-bold py-2' })
@@ -1623,14 +1623,14 @@ class Components extends Complements {
                     costo: element.costo ? element.costo : 0,
                     class: ` ${opts.color} grid-item-${opts.size}  `,
                     ...props
-                    // click: element.onclick ? element.onclick : opts.onClick 
+                    // click: element.onclick ? element.onclick : opts.onClick
                 });
 
                 // add cost.
                 var details = $('<div>', { class: 'col-12 pointer' });
                 var lbl = $('<label>', { text: element.costo ? formatPrice(element.costo) : '', class: 'col-12 fw-semibold py-2 text-muted' });
                 details.append(lbl);
-                // add text. 
+                // add text.
                 var description = $('<div>', { class: 'col-12 fw-bold d-flex flex-column pt-1 div1 pointer' });
                 var label = $('<label>', { text: element.nombre ? element.nombre : element.valor, class: 'fw-bold col-12' });
                 description.append(label);
@@ -2057,7 +2057,7 @@ class Components extends Complements {
         <div class="row p-2">
 
             <div class="col-12 col-md-4 p-3 m-0">
-                
+
             <div class="${opts.classForm}" id="${opts.form.id}" novalidate>
                 <div class="col-12 mb-2 d-flex justify-content-between">
                         <span class="fw-bold fs-5">${opts.title}</span>
@@ -2067,7 +2067,7 @@ class Components extends Complements {
                 </div>
 
             </div>
-            
+
             <div class="col-12 col-md-8" id="layoutTable">
             <div class="">
                 <button type="button" class="btn btn-primary btn-sm d-none" id="addRecetasSub">
@@ -2075,7 +2075,7 @@ class Components extends Complements {
             </div>
 
             <div class="m-0 p-0" id="${opts.table.parent}">
-               
+
             </div>
             </div>
         </div>`;
@@ -2228,6 +2228,8 @@ class Components extends Complements {
                 class: ``,
             });
 
+
+
             Object.keys(data).forEach((key, colIndex) => {
                 if (["btn", "a", "dropdown", "id"].includes(key)) return;
 
@@ -2235,19 +2237,26 @@ class Components extends Complements {
                     opts.center.includes(colIndex) ? "text-center" :
                         opts.right.includes(colIndex) ? "text-right" : "text-left";
 
-
-
-                const td = $("<td>", {
+                let tdText = data[key];
+                let cellAttributes = {
                     id: `${key}_${data.id}`,
                     style: `font-size:${opts.f_size}px;`,
-                    class: `${align} px-3 py-2 truncate  ${colorBg} ${opts.border_row}`,
-                    html: data[key],
-                });
+                    class: `${align} ${opts.border_row} px-3 py-2 truncate ${colorBg}`,
+                    html: tdText
+                };
 
-                tr.append(td);
+
+
+                    // Si opts.extends está activo y data[key] es objeto, sobrescribe atributos
+                    if (opts.extends && typeof data[key] === 'object' && data[key] !== null) {
+                        cellAttributes = Object.assign(cellAttributes, data[key]);
+                        cellAttributes.class += ` ${opts.border_row} `;
+                    }
+
+                tr.append($("<td>", cellAttributes));
             });
 
-            const actions = $("<td>", { class: `px-2 py-2 flex gap-1 justify-center items-center ${colorBg} ${opts.border_row}` });
+            const actions = $("<td>", { class: `px-2 py-2 flex justify-center items-center ${colorBg} ${opts.border_row}` });
 
             if (data.a?.length) {
                 data.a.forEach(atributos => {
