@@ -2241,7 +2241,7 @@ class Components extends Complements {
                 let cellAttributes = {
                     id: `${key}_${data.id}`,
                     style: `font-size:${opts.f_size}px;`,
-                    class: `${align} ${opts.border_row} px-3 py-2 truncate ${colorBg}`,
+                    class: `${align} ${opts.border_row} px-3 py-1 truncate ${colorBg}`,
                     html: tdText
                 };
 
@@ -2256,7 +2256,7 @@ class Components extends Complements {
                 tr.append($("<td>", cellAttributes));
             });
 
-            const actions = $("<td>", { class: `px-2 py-2 flex justify-center items-center ${colorBg} ${opts.border_row}` });
+            const actions = $("<td>", { class: `px-2 py-1 flex justify-center items-center ${colorBg} ${opts.border_row}` });
 
             if (data.a?.length) {
                 data.a.forEach(atributos => {
