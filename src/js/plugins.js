@@ -1,28 +1,28 @@
 $.fn.simple_json_tab = function (options) {
     txt = "";
-  
+
     var defaults = {
       data: [],
       id: "myTab",
     };
-  
+
     // Carga opciones por defecto
     var opts = $.fn.extend(defaults, options);
-  
+
     // Creamos el contenedor
     var div = $("<div>", {
       class: " ",
     });
-  
+
     var ul = $("<ul>", {
       class: "nav nav-tabs",
       id: opts.id,
     });
-  
+
     var div_content = $("<div>", {
       class: "tab-content ",
     });
-  
+
     for (const x of opts.data) {
       active = "";
       tab_active = "";
@@ -30,12 +30,12 @@ $.fn.simple_json_tab = function (options) {
         active     = "active";
         tab_active = "show active";
       }
-  
+
       var li = $("<li>", {
         class: "nav-item",
       });
-  
-   
+
+
     const navLink = $('<a>', {
         class           : "nav-link " + active,
         id              : x.id + "-tab",
@@ -43,43 +43,43 @@ $.fn.simple_json_tab = function (options) {
         href            : "#" + x.id,
         text            : x.tab
     });
-    
+
     // Solo asignar el evento si x.onClick está definido
     if (typeof x.onClick === 'function') {
         navLink.on('click', x.onClick);
     }
-    
+
     li.append(navLink);
 
       var div_tab = $("<div>", {
         class: "tab-pane fade  mt-2 " + tab_active,
         id: x.id,
       });
-  
+
       if (x.contenedor) {
         // let div_contenedor = $("<div>", {
         //     class: "row",
         // });
-  
+
         for (const y of x.contenedor) {
           var div_cont = $("<div>", {
             class: y.class,
             id: y.id,
           });
-  
+
           div_tab.append(div_cont);
         }
-  
+
         // div_tab.append(div_contenedor);
       }
-  
+
       ul.append(li);
       div_content.append(div_tab);
     }
-  
+
     div.append(ul);
     div.append(div_content);
-  
+
     $(this).html(div);
   };
 
@@ -90,13 +90,13 @@ $.fn.content_json_form = function (options) {
 
         class  : "row ",
         type   : "btn",
-        
+
         icon   : "icon-dollar",
         id     : 'jsonForm',
         prefijo: '',
 
         Element :'div',
-        
+
         color        : "primary",
         color_btn    : "outline-primary",
         color_default: 'primary',
@@ -118,9 +118,9 @@ $.fn.content_json_form = function (options) {
     for (const x of opts.data) {
         let div_col = "col-sm-4 mt-1";
 
-        if (x.class) 
+        if (x.class)
             div_col = x.class;
-        
+
 
         var div_hijo = $("<div>", {
             class: div_col,
@@ -133,7 +133,7 @@ $.fn.content_json_form = function (options) {
                     html: x.lbl,
                 })
             );
-       
+
         /*-- Crear elementos para los formularios --*/
 
         var required = x.required === false ? false : true;
@@ -146,12 +146,12 @@ $.fn.content_json_form = function (options) {
             tipo : x.tipo,
             name : aux_name,
             value: x.value,
-            
+
             required   :required,
             placeholder: x.placeholder,
             disabled   : x.disabled,
         };
-        
+
         switch (x.opc) {
 
             case 'code':
@@ -189,21 +189,21 @@ $.fn.content_json_form = function (options) {
                     for: idx,
                 });
 
-             
+
                 div_hijo.append(rd,lbl);
 
-            break;    
+            break;
 
             case 'checkbox':
                 div_hijo.empty();
                 let id = x.id;
 
                 div_hijo.attr('for',id);
-                
+
 
                     className  = x.className ? x.className :'form-check-input ';
                 let classLabel = x.classLabel ? x.classLabel : 'form-check-label fw-semibold';
-            
+
 
                 let radio = $('<input>', {
                     type    : 'checkbox',
@@ -214,7 +214,7 @@ $.fn.content_json_form = function (options) {
                     id      : id
                 });
 
-                let label = $('<label>', { 
+                let label = $('<label>', {
                     class: classLabel,
                     text: x.text ? x.text : x.valor,
                     for: id,
@@ -230,7 +230,7 @@ $.fn.content_json_form = function (options) {
             break;
 
 
-            case "list-group": 
+            case "list-group":
                 let divGroup = $('<div>',{ class: 'list-group ' });
 
                 x.data.forEach((item) => {
@@ -239,10 +239,10 @@ $.fn.content_json_form = function (options) {
                     let icons = $('<span>', { class: 'text-muted icon ' + item.ico });
                     icons.prepend(item.text);
 
-                    
+
                     let spans = $('<span>',{class:'badge badge-bordered badge-primary'});
                     spans.prepend(item.notifications);
-                    
+
                     a.append(icons,spans);
 
                     divGroup.append(a);
@@ -250,8 +250,8 @@ $.fn.content_json_form = function (options) {
 
 
                 div_hijo.append(divGroup);
-            
-            
+
+
             break;
 
             case "input":
@@ -264,7 +264,7 @@ $.fn.content_json_form = function (options) {
                 let attr_ipt = {
                     class: `form-control input-sm ${align}   `,
                     type: x.type,
-                    
+
                     onkeyup: x.onkeyup ? x.onkeyup : '',
                 };
 
@@ -284,7 +284,7 @@ $.fn.content_json_form = function (options) {
 
                 let val_type = "text";
                 if(x.type)
-                val_type = x.type;    
+                val_type = x.type;
 
                 if (x.tipo == "cifra" || x.tipo == "numero") {
                     align = "text-end";
@@ -316,7 +316,7 @@ $.fn.content_json_form = function (options) {
 
                 inputGroup.append($('<input >', atributos_ipt));
 
-      
+
                 if (x.tipo != "cifra") {
                     var iconSpan = $("<span>", {
                         class: "input-group-text",
@@ -416,7 +416,7 @@ $.fn.content_json_form = function (options) {
                 div_hijo.append(_btn);
 
             break;
-            
+
             case "btn-submit":
                 if (x.color_btn) {
                     color = x.color_btn;
@@ -456,27 +456,27 @@ $.fn.content_json_form = function (options) {
 
 
 
- 
+
                 var button = $('<button>',{
                     class: className + (x.className ? x.className :''),
                     html: `${i} ${text} `,
                     id: x.id,
                     ...buttonEvents,
                     type: 'button'
-                    
+
                 });
 
                 // var _btn = $("<button>", {
                 //     class: ` w-100 `,
                 //     type: "button",
-                   
+
                 // });
 
                 div_hijo.append(button);
 
 
             break;
-                
+
 
             case "select":
                 var select = $(`<select>`, {
@@ -487,7 +487,7 @@ $.fn.content_json_form = function (options) {
 
                     onchange: x.onchange,
                     placeholder: x.placeholder,
-                
+
                 });
 
                 if (x.selected) {
@@ -544,22 +544,22 @@ $.fn.content_json_form = function (options) {
                 );
 
                 div_hijo.append(inputGroup);
-            break;    
+            break;
 
             case 'btn-select':
 
                 const iptGroup = $('<div>',{class: 'input-group'});
 
-                const btnGroup = $('<a>',{ 
+                const btnGroup = $('<a>',{
                     class: 'btn btn-primary' ,
                     text: x.text,
-                    onclick: x.fn 
+                    onclick: x.fn
                 });
 
                 const icons = $('<i>',{class: x.icon});
                 btnGroup.append(icons);
 
-                // select 
+                // select
 
                 var iptSelect = $('<select>', {
                     class   : "form-control input-sm",
@@ -600,15 +600,15 @@ $.fn.content_json_form = function (options) {
 
                 div_hijo.append(iptGroup);
 
-                
 
-            break;    
+
+            break;
 
             default:
-               
+
                 div_hijo.append($('<'+x.opc+'>',x));
             break;
-    
+
 
         }
         /* vaciar el contenido */
@@ -619,7 +619,7 @@ $.fn.content_json_form = function (options) {
     // Crear botón para envio:
 
     if (opts.type == "btn") {
-    
+
         var div_btn = $("<div>", {
         class: 'mt-3 col-12 d-flex justify-content-center',
         });
@@ -633,11 +633,11 @@ $.fn.content_json_form = function (options) {
 
         div_btn.append(btn_submit);
         div.append(div_btn);
-    
+
     }
 
 
-    
+
 
     $(this).append(div);
 
@@ -826,7 +826,7 @@ $.fn.validation_form = function (options, callback) {
             .siblings("span.text-danger")
             .removeClass("hide")
             .html('<i class="icon-attention"></i> El campo es requerido');
-  
+
           if ($(this).parent().hasClass("input-group"))
             $(this)
               .parent()
@@ -838,44 +838,44 @@ $.fn.validation_form = function (options, callback) {
             .removeClass("is-invalid")
             .siblings("span.text-danger")
             .addClass("hide");
-  
+
           if ($(this).parent().hasClass("input-group"))
             $(this).parent().next("span").addClass("hide");
         }
-  
+
         if ($(this).is("[maxlength]")) {
           let limit = parseInt($(this).attr("maxlength"));
           $(this).val($(this).val().slice(0, limit));
         }
       });
-  
+
     //Permitido "texto", si existe validar máximo de caracteres
     $(this)
       .find('[tipo="texto"]')
       .on("input", function () {
         isValid = false;
         if ($(this).val().charAt(0) === " ") $(this).val($(this).val().trim());
-  
+
         if (!/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]+$/.test($(this).val()))
           $(this).val(
             $(this)
               .val()
               .replace(/[^a-zA-ZÀ-ÖØ-öø-ÿ\s]+/g, "")
           );
-  
+
         if ($(this).is("[maxlength]")) {
           let limit = parseInt($(this).attr("maxlength"));
           $(this).val($(this).val().slice(0, limit));
         }
       });
-  
+
     //Permitido "texto y números", si existe validar máximo de caracteres
     $(this)
       .find('[tipo="textoNum"],[tipo="alfanumerico"]')
       .on("input", function () {
         isValid = false;
         if ($(this).val().charAt(0) === " ") $(this).val($(this).val().trim());
-  
+
         if (!/^[a-zA-Z0-9 ]*$/.test($(this).val()))
           $(this).val(
             $(this)
@@ -887,7 +887,7 @@ $.fn.validation_form = function (options, callback) {
           $(this).val($(this).val().slice(0, limit));
         }
       });
-  
+
     // Permitido "solo números enteros", si existe validar máximo de caracteres.
     $(this)
       .find('[tipo="numero"]')
@@ -903,7 +903,7 @@ $.fn.validation_form = function (options, callback) {
           $(this).val($(this).val().slice(0, limit));
         }
       });
-  
+
     // Permitido "números enteros, decimales y negativos" con keyup, si existe, validar máximo de caracteres.
     $(this)
       .find('[tipo="cifra"]')
@@ -931,7 +931,7 @@ $.fn.validation_form = function (options, callback) {
           );
         }
       });
-  
+
     // Validar estructura de email
     $(this)
       .find('[type="email"], [tipo="correo"], [tipo="email"]')
@@ -945,23 +945,23 @@ $.fn.validation_form = function (options, callback) {
             .removeClass("hide")
             .html('<i class="icon-attention"></i> Ingrese un correo válido');
         else $(this).removeClass("is-invalid").next("span").addClass("hide");
-  
+
         $(this).val().toLowerCase();
       });
-  
+
     // Validar con trim que no haya espacios al principio o al final
     $(this)
       .find("input,textarea")
       .on("blur", function () {
         $(this).val($(this).val().trim());
-  
+
         if ($(this).hasClass("text-uppercase"))
           $(this).val($(this).val().toUpperCase());
-  
+
         if ($(this).hasClass("text-lowercase"))
           $(this).val($(this).val().toLowerCase());
       });
-  
+
     // SUBMIT
     let form = this;
     form.on("submit", function (e) {
@@ -981,7 +981,7 @@ $.fn.validation_form = function (options, callback) {
               class: "col-12 text-danger form-text hide",
               html: '<i class="icon-attention"></i> El campo es requerido',
             });
-  
+
             if ($(this).parent().hasClass("input-group") === true) {
               if ($(this).parent().next("span.text-danger").length === 0) {
                 $(this).parent().parent().append(span);
@@ -992,10 +992,10 @@ $.fn.validation_form = function (options, callback) {
             ) {
               $(this).parent().append(span);
             }
-  
+
             $(this).focus();
             $(this).addClass("is-invalid");
-  
+
             $(this)
               .siblings("span.text-danger")
               .removeClass("hide")
@@ -1013,20 +1013,20 @@ $.fn.validation_form = function (options, callback) {
               $(this).parent().next("span").addClass("hide");
           }
         });
-  
+
       if (isValid) {
         let defaults = { tipo: "json" };
         // Comvina opciones y defaults
         let opts = $.extend(defaults, options);
-  
+
         let formData = new FormData(form[0]);
-  
+
         for (const key in opts) {
           if (key !== "tipo") {
             formData.append(key, opts[key]);
           }
         }
-  
+
         if (opts.tipo === "text") {
           let valores = "";
           formData.forEach(function (valor, clave) {
@@ -1039,7 +1039,7 @@ $.fn.validation_form = function (options, callback) {
         } else if (opts.tipo === "json") {
           if (typeof callback === "function") {
             // form.find(':submit').prop('disabled', true);
-              
+
               for (const x of formData) console.log(x);
             callback(formData);
           }
@@ -1186,25 +1186,25 @@ $.fn.rpt_json_table2 = function (options) {
           thead.append(th);
       }
 
-      
+
       // Imprime las columnas de la tabla
 
       if (opts.data.thead) {
           // si la variable th recibe datos crea las columnas
           if (opts.extends) {
-              
+
               const ths = opts.data.thead;
 
               if (Array.isArray(ths)){
 
-                 
+
 
                   var thClean  = null;
                   var rowtr  = null;
                   var colth    = null;
-                 
 
-                  
+
+
                   var headerRow = $('<tr>');
                   var headerCell = null;
 
@@ -1218,35 +1218,35 @@ $.fn.rpt_json_table2 = function (options) {
                       headerRow.append(headerCell);
 
                   }else{
-                      
+
                       rowtr = $('<tr>');
                       Object.keys(element).forEach(key => {
 
 
                           var cell = $('<th>', { text: element[key], class: `text-center ${opts.color_th}` });
-                          
+
                           if (typeof element[key] === 'object') {
                               cell = $('<th>', element[key]);
-                          } 
-                          
+                          }
+
                           rowtr.append(cell);
                       });
                       thead.append(rowtr);
                   }
-                      
 
 
-                      
+
+
                   }); // end row
 
                   thead.append(headerRow);
-                  
-                  
-               
-                
+
+
+
+
               }else {
 
-                                         
+
                   ths.forEach(element => {
                       th = $("<tr>");
                       var col_th;
@@ -1267,7 +1267,7 @@ $.fn.rpt_json_table2 = function (options) {
           } else {
 
               let newTh = $('<tr>');
-             
+
 
 
               for (const k of arreglo_th) {
@@ -1395,9 +1395,9 @@ $.fn.rpt_json_table2 = function (options) {
 
                                   let onChangeipt = z.fn ? z.fn : '';
 
-                                  tdText = `<input 
+                                  tdText = `<input
                                   type   ="${ipt_type}"
-                                  value  = "${z.value}"  
+                                  value  = "${z.value}"
                                   id     = "${z.id}"
                                   name   = "${z.name}"
                                   onkeyUp = "${onChangeipt}"
@@ -1456,14 +1456,11 @@ $.fn.rpt_json_table2 = function (options) {
                       td.append($('<td>', attr_td));
 
 
-                      //   td.append(`<td id="${indices[col]}_${x.id}"
-                      //   style="" 
-                      //   class=""> 
-                      //   ${tdText}  </td>`);
+                    
                   }
 
 
-              }//end agrupar 
+              }//end agrupar
               else {
 
                   td.append($('<td>', {
@@ -1503,7 +1500,7 @@ $.fn.rpt_json_table2 = function (options) {
           }
 
           //crear boton personalizado
-          
+
           if(x.dropdown != null){
 
 
@@ -1527,33 +1524,33 @@ $.fn.rpt_json_table2 = function (options) {
             const $li = $("<li>");
 
               // Construir el contenido dinámico con íconos y texto
-              let html = dropdownItem.icon && dropdownItem.icon !== "" 
-              ? `<i class="text-info ${dropdownItem.icon}"></i>` 
+              let html = dropdownItem.icon && dropdownItem.icon !== ""
+              ? `<i class="text-info ${dropdownItem.icon}"></i>`
               : "<i class='icon-minus'></i>";
-              
-              html += dropdownItem.text && dropdownItem.text !== "" 
-              ? ` ${dropdownItem.text}` 
+
+              html += dropdownItem.text && dropdownItem.text !== ""
+              ? ` ${dropdownItem.text}`
               : "";
 
               const $a = $("<a>", {
                 class: "dropdown-item",
                 id: dropdownItem.id,
                 href: dropdownItem.href || "#",
-                html: html, 
+                html: html,
                 onclick:dropdownItem.onclick
               });
 
               $li.append($a);
 
             $ul.append($li);
-          }); 
+          });
 
 
 
 
 
           td_btn.append($button,$ul);
-          
+
           td.append(td_btn);
           }
 
@@ -1624,7 +1621,7 @@ $.fn.rpt_json_table2 = function (options) {
 
       const header = opts.data.head ? createDocsHead(opts.data.head) : '';
 
-  
+
 
     if (opts.header){
 
@@ -1665,7 +1662,7 @@ $.fn.Loading = function (options) {
       load = `<div class="d-flex align-items-center justify-content-center" style="min-height:300px;">
                     <h3 class="text-success">
                         <i class="icon-spin5 animate-spin"></i>
-                      
+
                        CARGANDO...
                     </h3>
                 </div>`;
@@ -1701,7 +1698,7 @@ function dataPicker(options) {
 
             showDropdowns: true,
             "autoApply"  : true,
-            
+
             locale: {
               format: "DD-MM-YYYY",
             },
