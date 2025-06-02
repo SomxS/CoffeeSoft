@@ -30,7 +30,11 @@
 
     <!-- CDN TAILWIND -->
     <script src="https://cdn.tailwindcss.com"></script>
-
+    <style>
+        .main-container {
+            min-height: calc(100vh - calc(4rem + 1px) - calc(4rem + 1px));
+        }
+    </style>
 
     <title> Plantilla coffeSoft </title>
 
@@ -41,7 +45,7 @@
         <section id="sidebar"></section>
 
         <div id="main__content">
-            <div class="" id="root"> </div>
+            <div class="main-container" id="root"> </div>
         </div>
     </main>
 
