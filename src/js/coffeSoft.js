@@ -2273,7 +2273,7 @@ class Components extends Complements {
                 tr.append($("<td>", cellAttributes));
             });
 
-            const actions = '';
+            let actions = '';
 
             if (data.a?.length) {
                 actions = $("<td>", { class: `px-2 py-2 flex justify-center items-center ${colorBg} ${opts.border_row}` });
