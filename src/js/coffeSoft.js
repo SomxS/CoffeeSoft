@@ -1,4 +1,4 @@
-// Rev.3
+// Rev.3.2
 
 class Complements {
 
@@ -2132,20 +2132,20 @@ class Components extends Complements {
             defaults.border_row = "border-t border-gray-700";
             defaults.color_row_alt = "bg-[#111827]";
         } else if (options.theme === 'corporativo') {
-            defaults.color_th      = "bg-[#003360] text-white";
-            defaults.color_row     = "bg-white ";
-            defaults.color_group   = "bg-[#D0E3FF] ";
-            defaults.class         = "w-full text-sm ";
+            defaults.color_th = "bg-[#003360] text-white";
+            defaults.color_row = "bg-white ";
+            defaults.color_group = "bg-gray-100 ";
+            defaults.class = "w-full text-sm ";
             defaults.border_table = "border rounded-lg  border-gray-300";
-            defaults.border_row    = "border-t border-gray-300";
+            defaults.border_row = "border-t border-gray-300";
             defaults.color_row_alt = "bg-gray-100";
         } else {
             defaults.color_th = "bg-[#F2F5F9] text-[#003360]";
-            defaults.color_row     = "bg-white hover:bg-gray-600";
-            defaults.color_group   = "bg-gray-200";
-            defaults.class         = "w-full table-auto text-sm text-gray-800";
+            defaults.color_row = "bg-white hover:bg-gray-600";
+            defaults.color_group = "bg-gray-200";
+            defaults.class = "w-full table-auto text-sm text-gray-800";
             defaults.border_table = "border rounded-lg  border-gray-300";
-            defaults.border_row    = "border-t border-gray-200";
+            defaults.border_row = "border-t border-gray-200";
             defaults.color_row_alt = "bg-gray-50";
         }
 
@@ -2224,9 +2224,25 @@ class Components extends Complements {
         const tbody = $("<tbody>");
 
         opts.data.row.forEach((data, i) => {
-            const colorBg = opts.striped && i % 2 === 0 ? opts.color_row_alt : opts.color_row;
+            let bg_grupo = "";
+
+            if (data.opc) {
+                if (data.opc == 1) {
+                    bg_grupo = opts.color_group + " font-bold";
+                } else if (data.opc == 2) {
+                    bg_grupo = opts.color_group + " text-primary fw-bold ";
+                }
+            }
+
+
+
+            const colorBg = bg_grupo || (opts.striped && i % 2 === 0 ? opts.color_row_alt : opts.color_row);
+
+
+            delete data.opc;
+
             const tr = $("<tr>", {
-                class: ``,
+                class: ` `,
             });
 
 
@@ -2248,18 +2264,19 @@ class Components extends Complements {
 
 
 
-                    // Si opts.extends está activo y data[key] es objeto, sobrescribe atributos
-                    if (opts.extends && typeof data[key] === 'object' && data[key] !== null) {
-                        cellAttributes = Object.assign(cellAttributes, data[key]);
-                        cellAttributes.class += ` ${opts.border_row} `;
-                    }
+                // Si opts.extends está activo y data[key] es objeto, sobrescribe atributos
+                if (opts.extends && typeof data[key] === 'object' && data[key] !== null) {
+                    cellAttributes = Object.assign(cellAttributes, data[key]);
+                    cellAttributes.class += ` ${opts.border_row} `;
+                }
 
                 tr.append($("<td>", cellAttributes));
             });
 
-            const actions = $("<td>", { class: `px-2 py-2 flex justify-center items-center ${colorBg} ${opts.border_row}` });
+            const actions = '';
 
             if (data.a?.length) {
+                actions = $("<td>", { class: `px-2 py-2 flex justify-center items-center ${colorBg} ${opts.border_row}` });
                 data.a.forEach(atributos => {
 
                     const button_a = $("<a>", atributos);
@@ -2269,6 +2286,8 @@ class Components extends Complements {
             }
 
             if (data.dropdown) {
+                actions = $("<td>", { class: `px-2 py-2 flex justify-center items-center ${colorBg} ${opts.border_row}` });
+
                 const wrapper = $("<div>", {
                     class: "relative"
                 });
