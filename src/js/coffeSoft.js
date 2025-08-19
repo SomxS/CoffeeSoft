@@ -1,4 +1,6 @@
-// Rev.3.2
+// Rev.3.2.1
+
+// new version of CoffeTable [ col-group ]
 
 class Complements {
 
@@ -2137,7 +2139,18 @@ class Components extends Complements {
             defaults.border_table = "border rounded-lg  border-gray-300";
             defaults.border_row = "border-t border-gray-300";
             defaults.color_row_alt = "bg-gray-100";
-        } else {
+        }
+
+        else if (options.theme === 'shadcdn') {
+            defaults.color_th = "bg-[#111827] text-white";
+            defaults.color_row = "bg-white text-[#111827]";
+            defaults.color_group = "bg-[#F1F5F9]";
+            defaults.class = "w-full table-auto text-sm";
+            defaults.border_table = "border rounded-md border-[#CBD5E1]";
+            defaults.border_row = "border-t border-[#E2E8F0]";
+            defaults.color_row_alt = "bg-[#F8FAFC]";
+        }
+        else {
             defaults.color_th = "bg-[#F2F5F9] text-[#003360]";
             defaults.color_row = "bg-white hover:bg-gray-600";
             defaults.color_group = "bg-gray-200";
@@ -2222,6 +2235,23 @@ class Components extends Complements {
         const tbody = $("<tbody>");
 
         opts.data.row.forEach((data, i) => {
+
+            // 🚩 Detectamos fila de agrupación horizontal
+            if (data.colgroup) {
+                const colspan = opts.data.thead?.length || Object.keys(data).length - 2; // exclude id, colgroup
+                const colgroupRow = $("<tr>").append(
+                    $("<td>", {
+                        colspan: colspan,
+                        class: ` px-3 py-2 font-semibold lowercase capitalize ${opts.border_row}  ${opts.color_group}`,
+                        html: data.dayOfWeek || ""
+                    })
+                );
+                tbody.append(colgroupRow);
+                return; // Salta esta iteración
+            }
+
+
+
             let bg_grupo = "";
 
             if (data.opc) {
@@ -2265,7 +2295,7 @@ class Components extends Complements {
                 // Si opts.extends está activo y data[key] es objeto, sobrescribe atributos
                 if (opts.extends && typeof data[key] === 'object' && data[key] !== null) {
                     cellAttributes = Object.assign(cellAttributes, data[key]);
-                    cellAttributes.class += ` ${opts.border_row} `;
+                    cellAttributes.class += ` ${opts.border_row} ${colorBg} `;
                 }
 
                 tr.append($("<td>", cellAttributes));
