@@ -2236,6 +2236,7 @@ class Components extends Complements {
 
         opts.data.row.forEach((data, i) => {
             
+            
             // 🚩 Detectamos fila de agrupación horizontal
             if (data.colgroup) {
                 const colspan = opts.data.thead?.length || Object.keys(data).length - 2; // exclude id, colgroup
