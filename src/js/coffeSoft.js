@@ -2235,21 +2235,25 @@ class Components extends Complements {
         const tbody = $("<tbody>");
 
         opts.data.row.forEach((data, i) => {
-
+            
             // 🚩 Detectamos fila de agrupación horizontal
             if (data.colgroup) {
                 const colspan = opts.data.thead?.length || Object.keys(data).length - 2; // exclude id, colgroup
+                const labelKey = Object.keys(data).find(key => !['id', 'colgroup'].includes(key));
+                const labelText = data[labelKey] || "";
+                const paddingClass = labelText ? "py-2" : "py-1";
+
                 const colgroupRow = $("<tr>").append(
                     $("<td>", {
                         colspan: colspan,
-                        class: ` px-3 py-2 font-semibold lowercase capitalize ${opts.border_row}  ${opts.color_group}`,
-                        html: data.dayOfWeek || ""
+                        class: `px-3 ${paddingClass} font-semibold lowercase capitalize ${opts.border_row} ${opts.color_group}`,
+                        html: labelText
                     })
                 );
+
                 tbody.append(colgroupRow);
                 return; // Salta esta iteración
             }
-
 
 
             let bg_grupo = "";
